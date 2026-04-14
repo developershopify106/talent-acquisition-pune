@@ -131,7 +131,10 @@
               <h2 class="title title--primary">
                 {{ 'sections.collection_template.empty' | t -}}
                 <br>
-                {{'sections.collection_template.use_fewer_filters_html'| t: link: collection.url, class: 'underlined-link link'}}
+                {{
+                  'sections.collection_template.use_fewer_filters_html'
+                  | t: link: collection.url, class: 'underlined-link link'
+                }}
               </h2>
             </div>
           </div>
@@ -153,16 +156,16 @@
               "
             >
               
-                {% assign skip_card_product_styles = false %}
-                {%- for product in collection.products -%}
-                  {%- if product.tags contains "featured" -%}
-               
-                {% assign lazy_load = false %}
+             
+              {% assign skip_card_product_styles = false %}
+              {%- for product in collection.products  -%}
+                  
+                 {% assign lazy_load = false %}
                 {%- if forloop.index > 2 -%}
                   {%- assign lazy_load = true -%}
                 {%- endif -%}
                 <li
-                  class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                  class="{% if product.tags contains 'featured' %} featured-product{% endif %} grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                   {% if settings.animations_reveal_on_scroll %}
                     data-cascade
                     style="--animation-order: {{ forloop.index }};"
@@ -182,40 +185,7 @@
                   %}
                 </li>
                 {%- assign skip_card_product_styles = true -%}
-                {% endif %}
-              {%- endfor -%}
-
-
-              {% assign skip_card_product_styles = false %}
-              {%- for product in collection.products -%}
-                {%- unless product.tags contains "featured" -%}
-                  
-                 {% assign lazy_load = false %}
-                  {%- if forloop.index > 2 -%}
-                    {%- assign lazy_load = true -%}
-                  {%- endif -%}
-                <li
-                  class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-                  {% if settings.animations_reveal_on_scroll %}
-                    data-cascade
-                    style="--animation-order: {{ forloop.index }};"
-                  {% endif %}
-                >
-                  {% render 'card-product',
-                    card_product: product,
-                    media_aspect_ratio: section.settings.image_ratio,
-                    image_shape: section.settings.image_shape,
-                    show_secondary_image: section.settings.show_secondary_image,
-                    show_vendor: section.settings.show_vendor,
-                    show_rating: section.settings.show_rating,
-                    lazy_load: lazy_load,
-                    skip_styles: skip_card_product_styles,
-                    quick_add: section.settings.quick_add,
-                    section_id: section.id
-                  %}
-                </li>
-                {%- assign skip_card_product_styles = true -%}
-                  {%- endunless -%}
+                
 
               {%- endfor -%}
 
@@ -243,16 +213,32 @@
   {%- endif -%}
 </div>
 <script>
+  document.addEventListener("DOMContentLoaded", function () {
+  var grid = document.querySelector("#product-grid");
+  if (!grid) return;
+
+  var featuredItems = grid.querySelectorAll(".featured-product");
+  if (!featuredItems.length) return;
+
+  // Featured products ko grid ke top pe move karo
+  featuredItems.forEach(function (item) {
+    grid.prepend(item);
+  });
+});
+
 var scroll_enable = document.querySelector("#product-grid")?.getAttribute("data-scroll");
 
 if (scroll_enable === "enabled") {
 
+  // ── Auto-trigger load more on scroll ──────────────────────────
   window.addEventListener("scroll", function () {
     var paginationLink = document.querySelector("#Huratips-Pagination a");
     if (!paginationLink) return;
 
+    // Already loading hai toh dobara click mat karo
     if (paginationLink.classList.contains("loading")) return;
 
+    // Page ke bottom ke paas aao toh auto-click
     var scrollTop    = window.scrollY;
     var windowHeight = window.innerHeight;
     var docHeight    = document.documentElement.scrollHeight;
@@ -263,6 +249,7 @@ if (scroll_enable === "enabled") {
     }
   });
 
+  // ── Load more click handler ────────────────────────────────────
   document.addEventListener("click", function (e) {
     var btn = e.target.closest("#Huratips-Pagination a");
     if (!btn) return;
@@ -271,6 +258,7 @@ if (scroll_enable === "enabled") {
 
     var scrollURL = btn.getAttribute("href");
 
+    // Loading indicator dikhao
     btn.textContent = "Loading...";
     btn.style.pointerEvents = "none";
 
@@ -283,30 +271,36 @@ if (scroll_enable === "enabled") {
         var parser   = new DOMParser();
         var doc      = parser.parseFromString(data, "text/html");
 
+        // ── Pagination update ──
         var newPagination = doc.querySelector("#Huratips-Pagination");
         var oldPagination = document.querySelector("#Huratips-Pagination");
 
         if (newPagination) {
+          // Aur pages hain — button update karo
           oldPagination.innerHTML = newPagination.innerHTML;
         } else {
+          // Last page — pagination hatao, end indicator dikhao
           oldPagination && oldPagination.remove();
          // var order2 = document.querySelector(".order_2");
          // order2 && order2.classList.add("active");
         }
 
+        // ── Naye products append karo ──
         var newProducts = doc.querySelector("#product-grid");
-        var grid = document.querySelector("#product-grid");
+        var grid        = document.querySelector("#product-grid");
 
         if (newProducts && grid) {
           grid.insertAdjacentHTML("beforeend", newProducts.innerHTML);
         }
       })
       .catch(function () {
+        // Error aane pe button restore karo
         btn.textContent     = "Load More";
         btn.style.pointerEvents = "auto";
         btn.classList.remove("loading");
       });
   });
+
 }
 
 </script>
@@ -383,7 +377,7 @@ if (scroll_enable === "enabled") {
     },
     {
     "type": "checkbox",
-    "label": "Infinite Loop",
+    "label": "Button",
     "id": "scroll_enabled"
     },
     {
