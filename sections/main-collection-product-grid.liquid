@@ -265,12 +265,10 @@ if (scroll_enable === "enabled") {
         var parser   = new DOMParser();
         var doc      = parser.parseFromString(data, "text/html");
 
-        // ── Pagination update ──
         var newPagination = doc.querySelector("#Huratips-Pagination");
         var oldPagination = document.querySelector("#Huratips-Pagination");
 
         if (newPagination) {
-          // Aur pages hain — button update karo
           oldPagination.innerHTML = newPagination.innerHTML;
         } else {
           // Last page — pagination hatao, end indicator dikhao
