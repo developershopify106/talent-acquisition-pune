@@ -220,7 +220,6 @@
   var featuredItems = grid.querySelectorAll(".featured-product");
   if (!featuredItems.length) return;
 
-  // Featured products ko grid ke top pe move karo
   featuredItems.forEach(function (item) {
     grid.prepend(item);
   });
@@ -230,7 +229,6 @@ var scroll_enable = document.querySelector("#product-grid")?.getAttribute("data-
 
 if (scroll_enable === "enabled") {
 
-  // ── Auto-trigger load more on scroll ──────────────────────────
   window.addEventListener("scroll", function () {
     var paginationLink = document.querySelector("#Huratips-Pagination a");
     if (!paginationLink) return;
@@ -247,7 +245,6 @@ if (scroll_enable === "enabled") {
     }
   });
 
-  // ── Load more click handler ────────────────────────────────────
   document.addEventListener("click", function (e) {
     var btn = e.target.closest("#Huratips-Pagination a");
     if (!btn) return;
