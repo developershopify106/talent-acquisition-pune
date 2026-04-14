@@ -232,9 +232,7 @@ if (scroll_enable === "enabled") {
   window.addEventListener("scroll", function () {
     var paginationLink = document.querySelector("#Huratips-Pagination a");
     if (!paginationLink) return;
-
     if (paginationLink.classList.contains("loading")) return;
-
     var scrollTop    = window.scrollY;
     var windowHeight = window.innerHeight;
     var docHeight    = document.documentElement.scrollHeight;
