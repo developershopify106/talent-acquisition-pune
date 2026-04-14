@@ -235,10 +235,8 @@ if (scroll_enable === "enabled") {
     var paginationLink = document.querySelector("#Huratips-Pagination a");
     if (!paginationLink) return;
 
-    // Already loading hai toh dobara click mat karo
     if (paginationLink.classList.contains("loading")) return;
 
-    // Page ke bottom ke paas aao toh auto-click
     var scrollTop    = window.scrollY;
     var windowHeight = window.innerHeight;
     var docHeight    = document.documentElement.scrollHeight;
@@ -258,7 +256,6 @@ if (scroll_enable === "enabled") {
 
     var scrollURL = btn.getAttribute("href");
 
-    // Loading indicator dikhao
     btn.textContent = "Loading...";
     btn.style.pointerEvents = "none";
 
