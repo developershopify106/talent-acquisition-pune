@@ -271,13 +271,11 @@ if (scroll_enable === "enabled") {
         if (newPagination) {
           oldPagination.innerHTML = newPagination.innerHTML;
         } else {
-          // Last page — pagination hatao, end indicator dikhao
           oldPagination && oldPagination.remove();
          // var order2 = document.querySelector(".order_2");
          // order2 && order2.classList.add("active");
         }
 
-        // ── Naye products append karo ──
         var newProducts = doc.querySelector("#product-grid");
         var grid        = document.querySelector("#product-grid");
 
@@ -286,7 +284,6 @@ if (scroll_enable === "enabled") {
         }
       })
       .catch(function () {
-        // Error aane pe button restore karo
         btn.textContent     = "Load More";
         btn.style.pointerEvents = "auto";
         btn.classList.remove("loading");
