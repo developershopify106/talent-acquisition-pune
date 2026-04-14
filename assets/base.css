@@ -3595,3 +3595,12 @@ details-disclosure > details {
     transform: translateX(100%) scaleX(0);
   }
 }
+#Huratips-Pagination a {
+    text-align: center;
+}
+#Huratips-Pagination {
+    text-align: center;
+}
+.featured_card .full-unstyled-link {
+    color: #f10000;
+}
